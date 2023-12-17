@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tn.houissa.projectmanagement.entities.User;
-import tn.houissa.projectmanagement.services.user.UserService;
+import tn.houissa.projectmanagement.services.UserService;
 
 import java.util.List;
 
@@ -23,28 +23,38 @@ public class UserController {
     @ResponseBody
     public ResponseEntity<?> addUser (@RequestBody User user){
         User createdUser= userService.addUser(user);
-        if(createdUser==null) return new ResponseEntity<>("Couldn't add user", HttpStatusCode.valueOf(400));
-        return new ResponseEntity<>(createdUser, HttpStatusCode.valueOf(200));
+        if(createdUser==null) return new ResponseEntity<>("Couldn't add user", HttpStatusCode.valueOf(404));
+        return new ResponseEntity<>(createdUser, HttpStatusCode.valueOf(201));
     }
 
     @GetMapping("/getAll")
     @ResponseBody
-    public List<User> getUsers (){
-        return userService.getUsers();
+    public ResponseEntity<?> getUsers (){
+        return new ResponseEntity<>(userService.getUsers(),HttpStatusCode.valueOf(200));
+    }
+
+    @GetMapping("/{idUser}")
+    @ResponseBody
+    public ResponseEntity<?> getOneUser(@PathVariable int idUser){
+        User userRetrieved= userService.getUser(idUser);
+        if(userRetrieved==null) return new ResponseEntity<>("Couldn't find user", HttpStatusCode.valueOf(404));
+        return new ResponseEntity<>(userRetrieved, HttpStatusCode.valueOf(200));
+
     }
 
 
     @DeleteMapping("delete/{idUser}")
     @ResponseBody
-    public String deleteUser(@PathVariable int idUser) {
-        userService.deleteUser(idUser);
-        return "User deleted";
+    public ResponseEntity<?> deleteUser(@PathVariable int idUser) {
+        if(userService.deleteUser(idUser)) return new ResponseEntity<>("User Deleted",HttpStatusCode.valueOf(200));
+        else return new ResponseEntity<>("Cannot delete user",HttpStatusCode.valueOf(404));
     }
 
     @PutMapping("update")
     @ResponseBody
-    public User updateUser(@RequestBody User user) {
-        return userService.updateUser(user);
+    public ResponseEntity<?> updateUser(@RequestBody User user) {
+        User updatedUser= userService.updateUser(user);
+        if(updatedUser==null) return new ResponseEntity<>("Couldn't update user", HttpStatusCode.valueOf(404));
+        return new ResponseEntity<>(updatedUser, HttpStatusCode.valueOf(200));
     }
-
 }

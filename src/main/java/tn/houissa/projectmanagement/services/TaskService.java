@@ -1,4 +1,4 @@
-package tn.houissa.projectmanagement.services.task;
+package tn.houissa.projectmanagement.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,37 +11,37 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class TaskService implements ITaskService {
+public class TaskService  {
 
     @Autowired
     TaskRepository taskRepository;
     @Autowired
     UserRepository userRepository;
 
-    @Override
+
     public Task addTask(Task task,int userId) {
-        if (validTask(task)){
-            task.setUser(userRepository.findById(userId).orElse(null));
+        User user =userRepository.findById(userId).orElse(null);
+        if (validTask(task)&& user!=null){
+            task.setUser(user);
             return taskRepository.save(task);
         }
         return null;
     }
 
-    @Override
     public List<Task> getTasks() {
         return taskRepository.findAll();
     }
 
-    @Override
     public Task updateTask(Task task) {
-        if (validTask(task)){
+        Task tasktoUpdate = taskRepository.findById(task.getTask_id()).orElse(null);
+
+        if (validTask(task) && tasktoUpdate != null){
             return taskRepository.save(task);
 
         }
         return null;
     }
 
-    @Override
     public boolean deleteTask(int idTask) {
         Task task =taskRepository.findById( idTask).orElse(null) ;
         if(task!=null){
@@ -51,7 +51,6 @@ public class TaskService implements ITaskService {
         return false;
     }
 
-    @Override
     public Task getTask(int idTask) {
         return taskRepository.findById(idTask).orElse(null);
     }

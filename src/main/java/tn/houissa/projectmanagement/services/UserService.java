@@ -1,4 +1,4 @@
-package tn.houissa.projectmanagement.services.user;
+package tn.houissa.projectmanagement.services;
 
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
@@ -11,12 +11,11 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class UserService implements IUserService {
+public class UserService {
 
     @Autowired
     UserRepository userRepository;
 
-    @Override
     public User addUser(User user) {
 
         if (validUser(user)){
@@ -25,20 +24,18 @@ public class UserService implements IUserService {
         return null;
     }
 
-    @Override
     public List<User> getUsers() {
         return userRepository.findAll();
     }
 
-    @Override
     public User updateUser(User user) {
-        if (validUser(user)){
+        User usertoUpdate = userRepository.findById(user.getUser_id()).orElse(null);
+        if (validUser(user) && usertoUpdate != null){
             return  userRepository.save(user);
         }
         return null;
     }
 
-    @Override
     public boolean deleteUser(int idUser) {
         User user =userRepository.findById( idUser).orElse(null) ;
         if(user!=null){
@@ -48,7 +45,6 @@ public class UserService implements IUserService {
         return false;
     }
 
-    @Override
     public User getUser(int idUser) {
         return userRepository.findById(idUser).orElse(null);
     }
