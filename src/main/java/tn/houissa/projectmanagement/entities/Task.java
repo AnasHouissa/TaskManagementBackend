@@ -7,6 +7,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Setter
@@ -40,9 +41,21 @@ public class Task implements Serializable {
     Date dueDate;
 
     @NonNull
+    @Column(name = "start_time")
+    LocalTime startTime;
+    @NonNull
+    @Column(name = "end_time")
+    LocalTime endTime;
+
+    @NonNull
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     TaskStatus status;
+
+    @NonNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "priority")
+    TaskPriority priority;
     @ManyToOne
     @JsonIgnore
     User user;
