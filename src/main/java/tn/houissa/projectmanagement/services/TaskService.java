@@ -56,6 +56,7 @@ public class TaskService  {
     }
 
     private boolean validTask(Task task) {
-        return task != null && task.getTitle().isEmpty() && task.getDescription().isEmpty() && task.getDueDate().compareTo(new Date())<0 && task.getStatus().name().isEmpty();
+
+        return task != null && !task.getPriority().name().isEmpty() && !task.getTitle().isEmpty() && !task.getDescription().isEmpty() && task.getDueDate().compareTo(new Date())>=0 && task.getStartTime().compareTo(task.getEndTime())<0 && !task.getStatus().name().isEmpty();
     }
 }
