@@ -1,7 +1,6 @@
 package tn.houissa.projectmanagement.controller;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,15 +13,11 @@ import tn.houissa.projectmanagement.services.userservice.IUserService;
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
+    final
     IUserService iUserService;
 
-    @PostMapping("/add")
-    @ResponseBody
-    public ResponseEntity<?> addUser (@RequestBody User user){
-        User createdUser= iUserService.addUser(user);
-        if(createdUser==null) return new ResponseEntity<>("Couldn't add user", HttpStatusCode.valueOf(404));
-        return new ResponseEntity<>(createdUser, HttpStatusCode.valueOf(201));
+    public UserController(IUserService iUserService) {
+        this.iUserService = iUserService;
     }
 
     @GetMapping("/getAll")

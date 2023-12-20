@@ -4,8 +4,10 @@ package tn.houissa.projectmanagement.entities;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
+import java.util.Collection;
 import java.util.Set;
 
 @Setter
@@ -20,20 +22,19 @@ import java.util.Set;
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "email")
 )
-public class User implements Serializable {
+public class User implements UserDetails {
 
     @Id
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     int user_id;
 
     @NonNull
-    @Column(name = "firstName")
+    @Column(name = "first_name")
     String firstName;
 
     @NonNull
-    @Column(name = "lastName")
+    @Column(name = "last_name")
     String lastName;
 
     @NonNull
@@ -45,11 +46,41 @@ public class User implements Serializable {
     String password;
 
     @NonNull
-    @Column(name = "username")
-    String username;
+    @Column(name = "is_verified")
+    Boolean isVerified;
+
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @Column(name = "tasks")
     Set<Task> tasks;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isVerified;
+    }
 }

@@ -13,10 +13,15 @@ import java.util.List;
 @Service
 public class TaskService  implements  ITaskService{
 
-    @Autowired
+    final
     ITaskRepository ITaskRepository;
-    @Autowired
+    final
     IUserRepository IUserRepository;
+
+    public TaskService(ITaskRepository ITaskRepository, IUserRepository IUserRepository) {
+        this.ITaskRepository = ITaskRepository;
+        this.IUserRepository = IUserRepository;
+    }
 
 
     @Override

@@ -6,7 +6,8 @@ import java.util.List;
 
 public interface IUserService {
 
-     User addUser(User user);
+     Boolean register(User user);
+     String login(String email,String pwd);
 
      List<User> getUsers();
 
@@ -15,4 +16,6 @@ public interface IUserService {
      boolean deleteUser(int idUser);
 
      User getUser(int idUser);
+
+     User getUserByEmail(String email);
 }

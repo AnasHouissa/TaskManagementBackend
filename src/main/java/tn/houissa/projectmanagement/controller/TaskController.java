@@ -14,8 +14,12 @@ import tn.houissa.projectmanagement.services.taskservice.ITaskService;
 @RequestMapping("/task")
 public class TaskController {
 
-    @Autowired
+    final
     ITaskService iTaskService;
+
+    public TaskController(ITaskService iTaskService) {
+        this.iTaskService = iTaskService;
+    }
 
     @PostMapping("/add/{userId}")
     @ResponseBody
