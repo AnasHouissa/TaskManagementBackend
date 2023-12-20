@@ -13,14 +13,17 @@ import java.util.Set;
 @NoArgsConstructor // default constructor
 @AllArgsConstructor  //
 @RequiredArgsConstructor // custom constructor ==> for final and not null fields
-@ToString // anotate @ToString.Exclude to make Lombok ignore it or @ToString(onlyExplicitlyIncluded = true) and anotate fields with @ToString.Include
+@ToString
+// anotate @ToString.Exclude to make Lombok ignore it or @ToString(onlyExplicitlyIncluded = true) and anotate fields with @ToString.Include
 //@Data  // it replaces @ToString, @EqualsAndHashCode, @Getter @Setter, and @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-
+@Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "email")
+)
 public class User implements Serializable {
 
     @Id
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     int user_id;
@@ -45,7 +48,7 @@ public class User implements Serializable {
     @Column(name = "username")
     String username;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @Column(name = "tasks")
     Set<Task> tasks;
 

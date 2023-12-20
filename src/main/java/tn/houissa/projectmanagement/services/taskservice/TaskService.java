@@ -1,58 +1,63 @@
-package tn.houissa.projectmanagement.services;
+package tn.houissa.projectmanagement.services.taskservice;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.houissa.projectmanagement.entities.Task;
 import tn.houissa.projectmanagement.entities.User;
-import tn.houissa.projectmanagement.repositories.TaskRepository;
-import tn.houissa.projectmanagement.repositories.UserRepository;
+import tn.houissa.projectmanagement.repositories.ITaskRepository;
+import tn.houissa.projectmanagement.repositories.IUserRepository;
 
 import java.util.Date;
 import java.util.List;
 
 @Service
-public class TaskService  {
+public class TaskService  implements  ITaskService{
 
     @Autowired
-    TaskRepository taskRepository;
+    ITaskRepository ITaskRepository;
     @Autowired
-    UserRepository userRepository;
+    IUserRepository IUserRepository;
 
 
-    public Task addTask(Task task,int userId) {
-        User user =userRepository.findById(userId).orElse(null);
+    @Override
+    public Task addTask(Task task, int userId) {
+        User user = IUserRepository.findById(userId).orElse(null);
         if (validTask(task)&& user!=null){
             task.setUser(user);
-            return taskRepository.save(task);
+            return ITaskRepository.save(task);
         }
         return null;
     }
 
+    @Override
     public List<Task> getTasks() {
-        return taskRepository.findAll();
+        return ITaskRepository.findAll();
     }
 
+    @Override
     public Task updateTask(Task task) {
-        Task tasktoUpdate = taskRepository.findById(task.getTask_id()).orElse(null);
+        Task tasktoUpdate = ITaskRepository.findById(task.getTask_id()).orElse(null);
 
         if (validTask(task) && tasktoUpdate != null){
-            return taskRepository.save(task);
+            return ITaskRepository.save(task);
 
         }
         return null;
     }
 
+    @Override
     public boolean deleteTask(int idTask) {
-        Task task =taskRepository.findById( idTask).orElse(null) ;
+        Task task = ITaskRepository.findById( idTask).orElse(null) ;
         if(task!=null){
-            taskRepository.delete(task);
+            ITaskRepository.delete(task);
             return true;
         }
         return false;
     }
 
+    @Override
     public Task getTask(int idTask) {
-        return taskRepository.findById(idTask).orElse(null);
+        return ITaskRepository.findById(idTask).orElse(null);
     }
 
     private boolean validTask(Task task) {

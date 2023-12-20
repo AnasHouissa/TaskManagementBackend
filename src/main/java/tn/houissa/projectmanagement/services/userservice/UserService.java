@@ -1,52 +1,56 @@
-package tn.houissa.projectmanagement.services;
+package tn.houissa.projectmanagement.services.userservice;
 
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.houissa.projectmanagement.entities.User;
-import tn.houissa.projectmanagement.repositories.UserRepository;
+import tn.houissa.projectmanagement.repositories.IUserRepository;
 
 import java.util.List;
 
 @Service
 @Slf4j
-public class UserService {
+public class UserService implements  IUserService{
 
     @Autowired
-    UserRepository userRepository;
+    IUserRepository IUserRepository;
 
+    @Override
     public User addUser(User user) {
 
         if (validUser(user)){
-            return userRepository.save(user);
+            return IUserRepository.save(user);
         }
         return null;
     }
 
+    @Override
     public List<User> getUsers() {
-        return userRepository.findAll();
+        return IUserRepository.findAll();
     }
 
+    @Override
     public User updateUser(User user) {
-        User usertoUpdate = userRepository.findById(user.getUser_id()).orElse(null);
+        User usertoUpdate = IUserRepository.findById(user.getUser_id()).orElse(null);
         if (validUser(user) && usertoUpdate != null){
-            return  userRepository.save(user);
+            return  IUserRepository.save(user);
         }
         return null;
     }
 
+    @Override
     public boolean deleteUser(int idUser) {
-        User user =userRepository.findById( idUser).orElse(null) ;
+        User user = IUserRepository.findById( idUser).orElse(null) ;
         if(user!=null){
-            userRepository.delete(user);
+            IUserRepository.delete(user);
             return true;
         }
         return false;
     }
 
+    @Override
     public User getUser(int idUser) {
-        return userRepository.findById(idUser).orElse(null);
+        return IUserRepository.findById(idUser).orElse(null);
     }
 
     private boolean validUser(User user) {
